@@ -3,9 +3,10 @@
  * @type {import("prettier").Config}
  */
 const config = {
-  tabWidth: 4,
-  singleQuote: true,
-  jsxSingleQuote: true,
-}
+    tabWidth: 4,
+    singleQuote: true,
+    jsxSingleQuote: true,
+    plugins: ['prettier-plugin-organize-imports'],
+};
 
-export default config;  
+export default config;

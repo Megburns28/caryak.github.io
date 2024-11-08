@@ -9,7 +9,8 @@ from api import oauth2
 from api.database import User
 from api.mail import Email
 from api.serializers.userSerializers import userEntity
-from .. import schemas, utils
+from .. import schemas, utilFunctions as utils
+from api.schemas import LoginUserSchema, CreateUserSchema
 from api.oauth2 import AuthJWT
 from ..config import settings
 

@@ -1,5 +1,4 @@
 from pymongo import MongoClient
-from config import settings
 from dotenv import load_dotenv
 import os
 import pymongo

@@ -1,11 +1,22 @@
-from pymongo import mongo_client
-import pymongo
+from pymongo import MongoClient
 from config import settings
+from dotenv import load_dotenv
+import os
+import pymongo
+    
 
-client = mongo_client.MongoClient(settings.DATABASE_URI)
-print('Connected to MongoDB...')
+load_dotenv()
 
-db = client[settings.DB_DATABASE]
+DB_HOST = os.getenv("DB_HOST")
+
+try:
+    client = MongoClient(DB_HOST)
+    client.admin.command('ping')
+    print("Pinged your deployment. You successfully connected to MongoDB!")
+except Exception as e:
+    print("Connection Error:", e)
+
+db = client["Caryak"]
 User = db.users
 Post = db.posts
 User.create_index([("email", pymongo.ASCENDING)], unique=True)

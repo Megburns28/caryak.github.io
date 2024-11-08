@@ -1,0 +1,60 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "type": "node",
+        "request": "launch",
+        "name": "Run Vite Dev Server",
+        "runtimeExecutable": "npm",
+        "runtimeArgs": ["run", "dev"],
+        "console": "internalConsole",
+        "internalConsoleOptions": "neverOpen",
+      },
+      {
+        "type": "node",
+        "request": "launch",
+        "name": "Build Project",
+        "runtimeExecutable": "npm",
+        "runtimeArgs": ["run", "build"],
+        "console": "internalConsole",
+        "internalConsoleOptions": "neverOpen",
+      },
+      {
+        "type": "node",
+        "request": "launch",
+        "name": "Preview Vite Build",
+        "runtimeExecutable": "npm",
+        "runtimeArgs": ["run", "preview"],
+        "console": "internalConsole",
+        "internalConsoleOptions": "neverOpen",
+      },
+      {
+        "type": "node",
+        "request": "launch",
+        "name": "Run ESLint",
+        "runtimeExecutable": "npm",
+        "runtimeArgs": ["run", "lint"],
+        "console": "internalConsole",
+        "internalConsoleOptions": "neverOpen",
+      },
+      {
+        "type": "node",
+        "request": "launch",
+        "name": "Run Prettier Format",
+        "runtimeExecutable": "npm",
+        "runtimeArgs": ["run", "format"],
+        "console": "internalConsole",
+        "internalConsoleOptions": "neverOpen",
+      },
+      {
+        "type": "node",
+        "request": "launch",
+        "name": "Run Type Check",
+        "runtimeExecutable": "npm",
+        "runtimeArgs": ["run", "type-check"],
+        "console": "internalConsole",
+        "internalConsoleOptions": "neverOpen",
+      },
+    ]
+  }
+  

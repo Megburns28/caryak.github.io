@@ -1,0 +1,9 @@
+name: caryak
+dependencies:
+  - fastapi
+  - uvicorn
+  - pymongo
+  - python-dotenv
+  - fastapi-jwt-auth==0.5.0
+  - fastapi-mail==1.2.4
+  - pydantic[email]

@@ -7,7 +7,7 @@ client = TestClient(app)
 
 def test_read_main(user):
     response = client.post("/api/auth/register", json=user)
-    print(response)
+    print(response.read())
 
 user = {
     "name": "John Doe",

@@ -22,18 +22,26 @@ REFRESH_TOKEN_EXPIRES_IN = settings.REFRESH_TOKEN_EXPIRES_IN
 
 @router.post('/register', status_code=status.HTTP_201_CREATED)
 async def create_user(payload: schemas.CreateUserSchema, request: Request):
+    # Check if user has a ku email
+    if not utils.verify_ku_email(payload.email.lower()):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST, detail='Email must be a Kettering University email')
+
     # Check if user already exist
     user = User.find_one({'email': payload.email.lower()})
     if user:
         raise HTTPException(status_code=status.HTTP_409_CONFLICT,
                             detail='Account already exist')
+    
     # Compare password and passwordConfirm
     if payload.password != payload.passwordConfirm:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST, detail='Passwords do not match')
+    
     #  Hash the password
     payload.password = utils.hash_password(payload.password)
     del payload.passwordConfirm
+    
     payload.role = 'user'
     payload.verified = False
     payload.email = payload.email.lower()

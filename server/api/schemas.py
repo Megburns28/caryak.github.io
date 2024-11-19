@@ -7,8 +7,6 @@ from bson.objectid import ObjectId
 class UserBaseSchema(BaseModel):
     name: str
     email: str
-    photo: str
-    role: str | None = None
     created_at: datetime | None = None
     updated_at: datetime | None = None
 

@@ -41,15 +41,18 @@ async def create_user(payload: schemas.CreateUserSchema, request: Request):
     #  Hash the password
     payload.password = utils.hash_password(payload.password)
     del payload.passwordConfirm
-    
-    payload.role = 'user'
+
+    # Extract user data from payload
     payload.verified = False
     payload.email = payload.email.lower()
     payload.created_at = datetime.utcnow()
     payload.updated_at = payload.created_at
 
+    # Add user to User collection
     result = User.insert_one(payload.dict())
     new_user = User.find_one({'_id': result.inserted_id})
+
+    # Send verification email
     try:
         token = randbytes(10)
         hashedCode = hashlib.sha256()
@@ -65,6 +68,7 @@ async def create_user(payload: schemas.CreateUserSchema, request: Request):
             "$set": {"verification_code": None, "updated_at": datetime.utcnow()}})
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                             detail='There was an error sending email')
+    
     return {'status': 'success', 'message': 'Verification token successfully sent to your email'}
 
 
@@ -77,7 +81,7 @@ def login(payload: schemas.LoginUserSchema, response: Response, Authorize: AuthJ
                             detail='Incorrect Email or Password')
     user = userEntity(db_user)
 
-    # Check if user verified his email
+    # Check if user verified their email
     if not user['verified']:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
                             detail='Please verify your email address')
@@ -112,14 +116,19 @@ def refresh_token(response: Response, Authorize: AuthJWT = Depends()):
     try:
         Authorize.jwt_refresh_token_required()
 
+        # Get user id from jwt
         user_id = Authorize.get_jwt_subject()
         if not user_id:
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
                                 detail='Could not refresh access token')
+        
+        # Get user from database
         user = userEntity(User.find_one({'_id': ObjectId(str(user_id))}))
         if not user:
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
                                 detail='The user belonging to this token no logger exist')
+        
+        # Create new access token
         access_token = Authorize.create_access_token(
             subject=str(user["id"]), expires_time=timedelta(minutes=ACCESS_TOKEN_EXPIRES_IN))
     except Exception as e:
@@ -130,10 +139,12 @@ def refresh_token(response: Response, Authorize: AuthJWT = Depends()):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST, detail=error)
 
+    # Store access tokens in cookie
     response.set_cookie('access_token', access_token, ACCESS_TOKEN_EXPIRES_IN * 60,
                         ACCESS_TOKEN_EXPIRES_IN * 60, '/', None, False, True, 'lax')
     response.set_cookie('logged_in', 'True', ACCESS_TOKEN_EXPIRES_IN * 60,
                         ACCESS_TOKEN_EXPIRES_IN * 60, '/', None, False, False, 'lax')
+    
     return {'access_token': access_token}
 
 
@@ -147,6 +158,7 @@ def logout(response: Response, Authorize: AuthJWT = Depends(), user_id: str = De
 
 @router.get('/verifyemail/{token}')
 def verify_me(token: str):
+    # Check for valid verification token and set verification status to True
     hashedCode = hashlib.sha256()
     hashedCode.update(bytes.fromhex(token))
     verification_code = hashedCode.hexdigest()
@@ -155,7 +167,5 @@ def verify_me(token: str):
     if not result:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN, detail='Invalid verification code or account already verified')
-    return {
-        "status": "success",
-        "message": "Account verified successfully"
-    }
+    
+    return {"status": "success", "message": "Account verified successfully"}

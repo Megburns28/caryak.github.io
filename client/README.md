@@ -5,8 +5,8 @@ This project is a React application built using TypeScript, SWC, Vite, and prima
 ## Prerequisites
 
 1. `nvm`
-2. Node.js (*latest*)
-3. `npm` (*latest*)
+2. Node.js (_latest_)
+3. `npm` (_latest_)
 
 ### `nvm` (Node Version Manager)
 
@@ -28,40 +28,41 @@ Download and install `nvm-windows` from the [official release page](https://gith
 
 ### Node.js and `npm` (Node Package Manager)
 
-   ```bash
-   nvm install node --latest-npm --default
-   ```
+```bash
+nvm install node --latest-npm --default
+```
 
 ## Installation
+
 Clone the project and install dependencies:
 
-   ```bash
-   git clone https://github.com/Megburns28/CarYak.git 
-   cd CarYak
-   npm install
-   ```
+```bash
+git clone https://github.com/Megburns28/CarYak.git
+cd CarYak
+npm install
+```
 
 ## `npm` Scripts
 
 The project includes several npm scripts to facilitate development and maintain code quality.
 
-| Script         | Description                                                  |
-| -------------- | ------------------------------------------------------------ |
-| `npm run dev`  | Starts the development server using Vite. Open `http://localhost:3000` to view the app. |
-| `npm run build`| Builds the app for production. Output files are generated in the `dist` directory. |
-| `npm run preview` | Previews the production build locally.                     |
-| `npm run lint` | Lints the codebase using ESLint for `.ts`, `.tsx` files.      |
-| `npm run format` | Formats the codebase using Prettier.                       |
-| `npm run type-check` | Checks the codebase for TypeScript type errors.         |
-| `npm start`    | Alias for `npm run dev`.                                      |
+| Script               | Description                                                                             |
+| -------------------- | --------------------------------------------------------------------------------------- |
+| `npm run dev`        | Starts the development server using Vite. Open `http://localhost:3000` to view the app. |
+| `npm run build`      | Builds the app for production. Output files are generated in the `dist` directory.      |
+| `npm run preview`    | Previews the production build locally.                                                  |
+| `npm run lint`       | Lints the codebase using ESLint for `.ts`, `.tsx` files.                                |
+| `npm run format`     | Formats the codebase using Prettier.                                                    |
+| `npm run type-check` | Checks the codebase for TypeScript type errors.                                         |
+| `npm start`          | Alias for `npm run dev`.                                                                |
 
 ## Development
 
 1. Run the development server:
 
-   ```bash
-   npm run dev
-   ```
+    ```bash
+    npm run dev
+    ```
 
 2. Open your browser to [`http://localhost:5173`](http://localhost:5173) to view the app.
 
@@ -95,7 +96,14 @@ Check for any TypeScript type errors:
 npm run type-check
 ```
 
+## Generate API Types
+
+To generate Typescript interfaces at `src/api/types.ts` from the server's Pydantic models:
+
+```bash
+npm run gen-api-types
+```
+
 ## License
 
 This project is licensed under the MIT License.
-

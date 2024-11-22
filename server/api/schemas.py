@@ -12,6 +12,7 @@ class UserBaseSchema(BaseModel):
 
     class Config:
         orm_mode = True
+        extra = "forbid"
 
 
 class CreateUserSchema(UserBaseSchema):
@@ -67,6 +68,7 @@ class PostBaseSchema(BaseModel):
         allow_population_by_field_name = True
         arbitrary_types_allowed = True
         json_encoders = {PyObjectId: str}
+        extra = "forbid"
 
 
 class CreatePostSchema(PostBaseSchema):
@@ -92,6 +94,7 @@ class UpdatePostSchema(BaseModel):
         allow_population_by_field_name = True
         arbitrary_types_allowed = True
         json_encoders = {ObjectId: str}
+        extra = "forbid"
 
 
 class ListPostResponse(BaseModel):

@@ -11,19 +11,22 @@ from pymongo.errors import DuplicateKeyError
 router = APIRouter()
 
 
+# Lookup posts that are from a given user
 @router.get('/')
 def get_posts(limit: int = 10, page: int = 1, search: str = '', user_id: str = Depends(require_user)):
     skip = (page - 1) * limit
     pipeline = [
         {'$match': {}},
-        {'$lookup': {'from': 'users', 'localField': 'user',
-                     'foreignField': '_id', 'as': 'user'}},
+        {'$lookup': {
+            'from': 'users',
+            'localField': 'user',
+            'foreignField': '_id',
+            'as': 'user'
+            }
+        },
         {'$unwind': '$user'},
-        {
-            '$skip': skip
-        }, {
-            '$limit': limit
-        }
+        {'$skip': skip},
+        {'$limit': limit}
     ]
     posts = postListEntity(Post.aggregate(pipeline))
     return {'status': 'success', 'results': len(posts), 'posts': posts}
@@ -34,12 +37,19 @@ def create_post(post: schemas.CreatePostSchema, user_id: str = Depends(require_u
     post.user = ObjectId(user_id)
     post.created_at = datetime.utcnow()
     post.updated_at = post.created_at
+
+    # Try to insert the post and retrieve it
     try:
         result = Post.insert_one(post.dict())
         pipeline = [
             {'$match': {'_id': result.inserted_id}},
-            {'$lookup': {'from': 'users', 'localField': 'user',
-                         'foreignField': '_id', 'as': 'user'}},
+            {'$lookup': {
+                'from': 'users',
+                'localField': 'user',
+                'foreignField': '_id',
+                'as': 'user'
+                }
+            },
             {'$unwind': '$user'},
         ]
         new_post = postListEntity(Post.aggregate(pipeline))[0]
@@ -62,6 +72,7 @@ def update_post(id: str, payload: schemas.UpdatePostSchema, user_id: str = Depen
     return postEntity(updated_post)
 
 
+# Get a post by a specific post object id
 @router.get('/{id}')
 def get_post(id: str, user_id: str = Depends(require_user)):
     if not ObjectId.is_valid(id):
@@ -69,8 +80,13 @@ def get_post(id: str, user_id: str = Depends(require_user)):
                             detail=f"Invalid id: {id}")
     pipeline = [
         {'$match': {'_id': ObjectId(id)}},
-        {'$lookup': {'from': 'users', 'localField': 'user',
-                     'foreignField': '_id', 'as': 'user'}},
+        {'$lookup': {
+            'from': 'users',
+            'localField': 'user',
+            'foreignField': '_id',
+            'as': 'user'
+            }
+        },
         {'$unwind': '$user'},
     ]
     db_cursor = Post.aggregate(pipeline)

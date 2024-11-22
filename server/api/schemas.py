@@ -4,6 +4,7 @@ from pydantic import BaseModel, EmailStr, constr
 from bson.objectid import ObjectId
 
 
+# User
 class UserBaseSchema(BaseModel):
     name: str
     email: str
@@ -39,10 +40,13 @@ class FilteredUserResponse(UserBaseSchema):
     id: str
 
 
+# Post
 class PostBaseSchema(BaseModel):
     title: str
-    content: str
-    category: str
+    car_make: str
+    car_model: str
+    car_year: int
+    description: str
     image: str
     created_at: datetime | None = None
     updated_at: datetime | None = None
@@ -68,8 +72,10 @@ class PostResponse(PostBaseSchema):
 
 class UpdatePostSchema(BaseModel):
     title: str | None = None
-    content: str | None = None
-    category: str | None = None
+    car_make: str | None = None
+    car_model: str | None = None
+    car_year: int | None = None
+    description: str | None = None
     image: str | None = None
     user: str | None = None
 

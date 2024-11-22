@@ -8,22 +8,13 @@ import {
     Toolbar,
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
-import {
-    ChangeEvent,
-    MouseEvent,
-    useCallback,
-    useEffect,
-    useState,
-} from 'react';
+import { MouseEvent, useCallback, useEffect, useState } from 'react';
+import AccountPage from './AccountPage';
 
 const Header = () => {
-    const [auth, setAuth] = useState(true);
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const [closingMenu, setClosingMenu] = useState(false);
-
-    const handleAuth = useCallback((event: ChangeEvent<HTMLInputElement>) => {
-        setAuth(event.target.checked);
-    }, []);
+    const [accountPageOpened, setOpenAccountPage] = useState(false);
 
     const handleMenu = useCallback((event: MouseEvent<HTMLElement>) => {
         setAnchorEl(event.currentTarget);
@@ -31,6 +22,14 @@ const Header = () => {
 
     const handleClose = useCallback(() => {
         setClosingMenu(true);
+    }, []);
+
+    const handleOpenAccountPage = useCallback(() => {
+        setOpenAccountPage(true);
+    }, []);
+
+    const handleCloseAccountPage = useCallback(() => {
+        setOpenAccountPage(false);
     }, []);
 
     const theme = useTheme();
@@ -96,9 +95,13 @@ const Header = () => {
                     {anchorEl ? (
                         <>
                             <MenuItem onClick={handleClose}>Profile</MenuItem>
-                            <MenuItem onClick={handleClose}>
-                                My account
+                            <MenuItem onClick={handleOpenAccountPage}>
+                                My Account
                             </MenuItem>
+                            <AccountPage
+                                open={accountPageOpened}
+                                onClose={handleCloseAccountPage}
+                            />
                         </>
                     ) : (
                         <MenuItem onClick={handleClose}>Log in</MenuItem>

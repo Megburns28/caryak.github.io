@@ -1,6 +1,6 @@
 from datetime import datetime
 from typing import List
-from pydantic import BaseModel, EmailStr, constr
+from pydantic import BaseModel, EmailStr, constr, HttpUrl
 from bson.objectid import ObjectId
 
 
@@ -70,7 +70,7 @@ class UpdatePostSchema(BaseModel):
     title: str | None = None
     content: str | None = None
     category: str | None = None
-    image: str | None = None
+    image: HttpUrl | None = None
     user: str | None = None
 
     class Config:

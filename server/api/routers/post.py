@@ -1,10 +1,11 @@
 from datetime import datetime
-from fastapi import Depends, HTTPException, status, APIRouter, Response
+from fastapi import Depends, HTTPException, status, APIRouter, Response, UploadFile, File
 from pymongo.collection import ReturnDocument
 from api import schemas
 from api.database import Post
 from api.oauth2 import require_user
 from api.serializers.postSerializers import postEntity, postListEntity
+from utils.s3 import upload_image_to_s3
 from bson.objectid import ObjectId
 from pymongo.errors import DuplicateKeyError
 
@@ -28,6 +29,18 @@ def get_posts(limit: int = 10, page: int = 1, search: str = '', user_id: str = D
     posts = postListEntity(Post.aggregate(pipeline))
     return {'status': 'success', 'results': len(posts), 'posts': posts}
 
+
+
+@router.post("/upload-image")
+async def upload_image(file: UploadFile = File(...)):
+    # Validate that the file is an image
+    if not file.content_type.startswith("image/"):
+        raise HTTPException(status_code=400, detail="Only image files are allowed.")
+    
+    # Upload to S3
+    image_url = upload_image_to_s3(file)
+
+    return {"image_url": image_url}
 
 @router.post('/', status_code=status.HTTP_201_CREATED)
 def create_post(post: schemas.CreatePostSchema, user_id: str = Depends(require_user)):

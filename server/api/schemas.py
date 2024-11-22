@@ -56,6 +56,10 @@ class PostBaseSchema(BaseModel):
 
 class CreatePostSchema(PostBaseSchema):
     user: ObjectId | None = None
+    title: str
+    content: str
+    category: str
+    image: str | None = None  # Make `image` optional
     pass
 
 

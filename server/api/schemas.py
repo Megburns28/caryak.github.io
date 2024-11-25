@@ -1,7 +1,8 @@
 from datetime import datetime
 from typing import List
-from pydantic import BaseModel, EmailStr, constr
+
 from bson.objectid import ObjectId
+from pydantic import BaseModel, EmailStr, HttpUrl, constr
 
 
 # User
@@ -60,6 +61,10 @@ class PostBaseSchema(BaseModel):
 
 class CreatePostSchema(PostBaseSchema):
     user: ObjectId | None = None
+    title: str
+    content: str
+    category: str
+    image: str | None = None  # Make `image` optional
     pass
 
 
@@ -76,7 +81,7 @@ class UpdatePostSchema(BaseModel):
     car_model: str | None = None
     car_year: int | None = None
     description: str | None = None
-    image: str | None = None
+    image: HttpUrl | None = None
     user: str | None = None
 
     class Config:

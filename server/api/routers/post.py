@@ -2,9 +2,9 @@ from datetime import datetime
 from fastapi import Depends, HTTPException, status, APIRouter, Response, UploadFile, File
 from pymongo.collection import ReturnDocument
 from api import schemas
-from api.database import Post
+from api.database import Post, Vote
 from api.oauth2 import require_user
-from api.serializers.postSerializers import postEntity, postListEntity
+from api.serializers.postSerializers import postEntity, postListEntity, voteEntity
 from api.utils.s3 import upload_image_to_s3
 from bson.objectid import ObjectId
 from pymongo.errors import DuplicateKeyError
@@ -161,3 +161,27 @@ def delete_post(id: str, user_id: str = Depends(require_user)):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=f'No post with this id: {id} found')
     return Response(status_code=status.HTTP_204_NO_CONTENT)
+
+
+@router.get('/{id}/{votes}')
+@router.put('/{id}')
+def update_votes(id: str, votes: int = 0): # votes is the payload
+    db_cursor = Vote.find_one(filter={'_id': ObjectId(id)})
+
+    vote = schemas.VoteSchema
+    vote.id = ObjectId(id)
+
+    if db_cursor == None:
+        vote.votes = votes
+    else:
+        vote.votes = db_cursor.get('votes') + votes
+
+    try:
+        update_result = Vote.find_one_and_update(filter={'_id': vote.id},
+                                 update={ "$set": { '_id': vote.id, 'votes': vote.votes } },
+                                 upsert=True,
+                                 return_document=ReturnDocument.AFTER)
+        return voteEntity(update_result)
+    except DuplicateKeyError:
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT,
+                            detail=f"Post Votes with id: '{vote.id}' already exists")

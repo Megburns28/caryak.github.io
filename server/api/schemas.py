@@ -59,6 +59,15 @@ class PostBaseSchema(BaseModel):
         json_encoders = {ObjectId: str}
 
 
+class VoteBaseSchema(BaseModel):
+    votes: int
+
+    class Config:
+        orm_mode = True
+        arbitrary_types_allowed = True
+        json_encoders = {ObjectId: str}
+
+
 class CreatePostSchema(PostBaseSchema):
     user: ObjectId | None = None
     title: str
@@ -67,6 +76,10 @@ class CreatePostSchema(PostBaseSchema):
     image: str | None = None  # Make `image` optional
     pass
 
+class VoteSchema(VoteBaseSchema):
+    id: ObjectId | None = None
+    votes: int
+    pass
 
 class PostResponse(PostBaseSchema):
     id: str

@@ -18,5 +18,6 @@ except Exception as e:
 db = client["Caryak"]
 User = db.users
 Post = db.posts
+Vote = db.votes
 User.create_index([("email", pymongo.ASCENDING)], unique=True)
 Post.create_index([("title", pymongo.ASCENDING)], unique=True)

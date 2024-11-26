@@ -16,6 +16,13 @@ def postEntity(post) -> dict:
     }
 
 
+def voteEntity(post) -> dict:
+    return {
+        "id": str(post["_id"]),
+        "vote": post["votes"],
+    }
+
+
 def populatedPostEntity(post) -> dict:
     return {
         "id": str(post["_id"]),

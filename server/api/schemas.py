@@ -1,14 +1,13 @@
 from datetime import datetime
-from typing import List
-from pydantic import BaseModel, EmailStr, constr, HttpUrl
+from typing import Annotated, List
+from pydantic import BaseModel, EmailStr, Field, constr, HttpUrl
 from bson.objectid import ObjectId
-
 
 class UserBaseSchema(BaseModel):
     name: str
     email: str
-    created_at: datetime | None = None
-    updated_at: datetime | None = None
+    created_at: datetime | None = Field(default=None, tsType="Date")
+    updated_at: datetime | None = Field(default=None, tsType="Date")
 
     class Config:
         orm_mode = True
@@ -60,8 +59,8 @@ class PostBaseSchema(BaseModel):
     content: str
     category: str
     image: str
-    created_at: datetime | None = None
-    updated_at: datetime | None = None
+    created_at: datetime | None = Field(default=None, tsType="Date")
+    updated_at: datetime | None = Field(default=None, tsType="Date")
 
     class Config:
         orm_mode = True
@@ -78,8 +77,8 @@ class CreatePostSchema(PostBaseSchema):
 class PostResponse(PostBaseSchema):
     id: str
     user: FilteredUserResponse
-    created_at: datetime
-    updated_at: datetime
+    created_at: datetime = Field(tsType="Date")
+    updated_at: datetime = Field(tsType="Date")
 
 
 class UpdatePostSchema(BaseModel):

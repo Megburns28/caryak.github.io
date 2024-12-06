@@ -10,15 +10,15 @@ export interface CreatePostSchema {
   content: string;
   category: string;
   image: string;
-  created_at?: string | null;
-  updated_at?: string | null;
+  created_at?: Date | null;
+  updated_at?: Date | null;
   user?: string | null;
 }
 export interface CreateUserSchema {
   name: string;
   email: string;
-  created_at?: string | null;
-  updated_at?: string | null;
+  created_at?: Date | null;
+  updated_at?: Date | null;
   password: string;
   passwordConfirm: string;
   verified?: boolean;
@@ -26,8 +26,8 @@ export interface CreateUserSchema {
 export interface FilteredUserResponse {
   name: string;
   email: string;
-  created_at?: string | null;
-  updated_at?: string | null;
+  created_at?: Date | null;
+  updated_at?: Date | null;
   id: string;
 }
 export interface ListPostResponse {
@@ -40,8 +40,8 @@ export interface PostResponse {
   content: string;
   category: string;
   image: string;
-  created_at: string;
-  updated_at: string;
+  created_at: Date;
+  updated_at: Date;
   id: string;
   user: FilteredUserResponse;
 }
@@ -54,8 +54,8 @@ export interface PostBaseSchema {
   content: string;
   category: string;
   image: string;
-  created_at?: string | null;
-  updated_at?: string | null;
+  created_at?: Date | null;
+  updated_at?: Date | null;
 }
 export interface UpdatePostSchema {
   title?: string | null;
@@ -67,8 +67,8 @@ export interface UpdatePostSchema {
 export interface UserBaseSchema {
   name: string;
   email: string;
-  created_at?: string | null;
-  updated_at?: string | null;
+  created_at?: Date | null;
+  updated_at?: Date | null;
 }
 export interface UserResponse {
   status: string;
@@ -77,7 +77,7 @@ export interface UserResponse {
 export interface UserResponseSchema {
   name: string;
   email: string;
-  created_at?: string | null;
-  updated_at?: string | null;
+  created_at?: Date | null;
+  updated_at?: Date | null;
   id: string;
 }

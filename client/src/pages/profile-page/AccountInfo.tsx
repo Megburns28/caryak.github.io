@@ -1,14 +1,11 @@
 import { Settings } from '@mui/icons-material';
-import {
-    Box,
-    Button,
-    IconButton,
-    Popover,
-    TextField,
-    Typography,
-} from '@mui/material';
+import { Box, Button, IconButton, Popover, Typography } from '@mui/material';
 import axios from 'axios';
 import { MouseEvent, useCallback, useMemo, useState } from 'react';
+import { useToggle } from 'usehooks-ts';
+import { api } from '../../api/endpoints';
+import { login, register } from '../../api/services';
+import HelperTextField from './HelperTextField';
 
 const KETTERING_EMAIL_LENGTH = 8;
 const MIN_PASS_LENGTH = 8;
@@ -16,10 +13,10 @@ const MIN_PASS_LENGTH = 8;
 const AccountInfo = () => {
     const [auth, setAuth] = useState('');
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+    const [signingUp, toggleSigningUp] = useToggle(false);
+    const [name, setName] = useState('');
     const [email, setEmail] = useState('');
-    const [emailActive, setEmailActive] = useState(false);
     const [pass, setPass] = useState('');
-    const [passActive, setPassActive] = useState(false);
     const [confPass, setConfPass] = useState('');
 
     const openMenu = useCallback((event: MouseEvent<HTMLElement>) => {
@@ -32,17 +29,20 @@ const AccountInfo = () => {
 
     const isEmailValid = useMemo(() => {
         return (
-            emailActive ||
             email == '' ||
             (email.endsWith('@kettering.edu') &&
                 email.split('@kettering.edu')[0].length ==
                     KETTERING_EMAIL_LENGTH)
         );
-    }, [email, emailActive]);
+    }, [email]);
 
     const isPassValid = useMemo(() => {
-        return passActive || pass == '' || pass.length >= MIN_PASS_LENGTH;
-    }, [pass, passActive]);
+        return pass == '' || pass.length >= MIN_PASS_LENGTH;
+    }, [pass]);
+
+    const isConfPassValid = useMemo(() => {
+        return confPass == '' || confPass == pass;
+    }, [confPass, pass]);
 
     return (
         <>
@@ -69,77 +69,93 @@ const AccountInfo = () => {
                         flexDirection: 'column',
                         padding: 2,
                         gap: 1,
+                        minWidth: 300,
                     }}
                 >
-                    <Typography fontWeight='bold'>Sign Up</Typography>
+                    <Typography fontWeight='bold'>
+                        {signingUp ? 'Nice to meet you!' : 'Welcome back!'}
+                    </Typography>
                     {auth ? (
                         <>Logged in. :)</>
                     ) : (
                         <>
-                            <TextField
+                            {signingUp ? (
+                                <HelperTextField
+                                    label='Name'
+                                    value={name}
+                                    onChange={(e) => {
+                                        setName(e.target.value);
+                                    }}
+                                />
+                            ) : null}
+                            <HelperTextField
                                 label='Email'
                                 value={email}
                                 onChange={(e) => {
                                     setEmail(e.target.value);
                                 }}
-                                onFocus={() => {
-                                    setEmailActive(true);
-                                }}
-                                onBlur={() => {
-                                    setEmailActive(false);
-                                }}
                                 error={!isEmailValid}
-                                helperText={
-                                    isEmailValid
-                                        ? null
-                                        : 'Please enter your Kettering email.'
-                                }
+                                helperText='Please enter your Kettering email.'
                                 autoComplete='username'
                             />
-                            <TextField
+                            <HelperTextField
                                 label='Password'
+                                type='password'
                                 value={pass}
                                 onChange={(e) => {
                                     setPass(e.target.value);
                                 }}
-                                onFocus={() => {
-                                    setPassActive(true);
-                                }}
-                                onBlur={() => {
-                                    setPassActive(false);
-                                }}
                                 error={!isPassValid}
-                                helperText={
-                                    isPassValid
-                                        ? null
-                                        : 'Password must be at least 8 characters long.'
+                                helperText='Password must be at least 8 characters long.'
+                                autoComplete={
+                                    signingUp
+                                        ? 'new-password'
+                                        : 'current-password'
                                 }
-                                autoComplete='password'
                             />
-                            <TextField
-                                label='Confirm Password'
-                                value={confPass}
-                                onChange={(e) => {
-                                    setConfPass(e.target.value);
-                                }}
-                            />
+                            {signingUp ? (
+                                <HelperTextField
+                                    label='Confirm Password'
+                                    type='password'
+                                    value={confPass}
+                                    onChange={(e) => {
+                                        setConfPass(e.target.value);
+                                    }}
+                                    error={!isConfPassValid}
+                                    helperText='Password and confirm password must match.'
+                                />
+                            ) : null}
                             <Button
+                                variant='contained'
                                 onClick={() => {
-                                    void axios.post(
-                                        'http://localhost:8000/api/auth/register',
-                                        {
-                                            created_at: new Date(),
-                                            updated_at: new Date(),
-                                            email: email,
-                                            name: 'hello',
-                                            password: pass,
-                                            passwordConfirm: confPass,
-                                            verified: false,
-                                        },
-                                    );
+                                    if (signingUp) {
+                                        register(email, name, pass, confPass)
+                                            .then(() => {
+                                                toggleSigningUp();
+                                            })
+                                            .catch(() => null);
+                                    } else {
+                                        login(email, pass)
+                                            .then((resp) => {
+                                                console.log(resp);
+                                            })
+                                            .catch(() => null);
+
+                                        void axios.get(api.auth.refresh);
+                                    }
                                 }}
                             >
-                                Login
+                                {signingUp ? 'Sign up' : 'Log In'}
+                            </Button>
+                            <Button
+                                size='small'
+                                onClick={() => {
+                                    toggleSigningUp();
+                                }}
+                            >
+                                {signingUp
+                                    ? 'Already have an account? Log in'
+                                    : "Don't have an account? Sign up"}
                             </Button>
                         </>
                     )}

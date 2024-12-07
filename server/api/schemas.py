@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Annotated, List
+from typing import List
 from pydantic import BaseModel, EmailStr, Field, constr, HttpUrl
 from bson.objectid import ObjectId
 

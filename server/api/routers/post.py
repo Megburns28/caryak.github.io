@@ -235,8 +235,8 @@ def update_post(id: str, payload: schemas.UpdatePostSchema, user_id: str = Depen
     return postEntity(updated_post)
 
 
-xx@router.get('/')
-def get_post_with_vote(id: str, user_id: str = Depends(require_user)):
+@router.get('/')
+def get_post_with_votes(id: str, user_id: str = Depends(require_user)):
     if not ObjectId.is_valid(id):
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
                             detail=f"Invalid id: {id}")

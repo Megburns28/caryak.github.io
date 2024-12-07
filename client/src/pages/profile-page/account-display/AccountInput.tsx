@@ -89,6 +89,11 @@ const AccountInput: FC<AccountInputProps> = ({ setAuth }) => {
                         register(email, name, pass, confPass)
                             .then(() => {
                                 toggleSigningUp();
+                                logIn(email, pass)
+                                    .then(() => {
+                                        setAuth(true);
+                                    })
+                                    .catch(() => null);
                             })
                             .catch(() => null);
                     } else {

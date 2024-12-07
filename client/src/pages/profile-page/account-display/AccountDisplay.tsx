@@ -3,6 +3,7 @@ import { Box, IconButton, Popover } from '@mui/material';
 import { MouseEvent, useCallback, useState } from 'react';
 import { useInterval } from 'usehooks-ts';
 import { refreshAuth } from '../../../api/services/auth';
+import AccountInfo from './AccountInfo';
 import AccountInput from './AccountInput';
 
 const REFRESH_INTERVAL_MS = 10 * 60 * 1000;
@@ -49,12 +50,12 @@ const AccountDisplay = () => {
                         display: 'flex',
                         flexDirection: 'column',
                         padding: 2,
-                        gap: 1,
+                        gap: 2,
                         minWidth: 300,
                     }}
                 >
                     {auth ? (
-                        <>Logged in. :)</>
+                        <AccountInfo setAuth={setAuth} />
                     ) : (
                         <AccountInput setAuth={setAuth} />
                     )}

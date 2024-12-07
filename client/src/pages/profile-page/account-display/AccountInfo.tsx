@@ -1,7 +1,7 @@
 import { Box, Button, Divider } from '@mui/material';
 import { Dispatch, FC, SetStateAction, useEffect, useState } from 'react';
 import { logOut } from '../../../api/services/auth';
-import { getActiveUser } from '../../../api/services/user';
+import { getUserInfo } from '../../../api/services/user';
 import { UserResponseSchema } from '../../../api/types';
 import InfoFieldDisplay from './InfoFieldDisplay';
 
@@ -10,12 +10,12 @@ interface AccountInfoProps {
 }
 
 const AccountInfo: FC<AccountInfoProps> = ({ setAuth }) => {
-    const [userData, setUserData] = useState<UserResponseSchema | null>(null);
+    const [userInfo, setUserInfo] = useState<UserResponseSchema | null>(null);
 
     useEffect(() => {
-        getActiveUser()
+        getUserInfo()
             .then((resp) => {
-                setUserData(resp.data.user);
+                setUserInfo(resp.data.user);
             })
             .catch(() => null);
     }, []);
@@ -23,11 +23,11 @@ const AccountInfo: FC<AccountInfoProps> = ({ setAuth }) => {
     return (
         <>
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-                <InfoFieldDisplay label='Name' value={userData?.name ?? null} />
+                <InfoFieldDisplay label='Name' value={userInfo?.name ?? null} />
                 <Divider flexItem />
                 <InfoFieldDisplay
                     label='Email'
-                    value={userData?.email ?? null}
+                    value={userInfo?.email ?? null}
                 />
             </Box>
             <Button

@@ -72,6 +72,12 @@ class PostBaseSchema(BaseModel):
 
 class CreatePostSchema(PostBaseSchema):
     user: PyObjectId | None = None
+    title: str
+    content: str
+    category: str
+    image: str | None = None  # Make `image` optional
+    pass
+
 
 
 class PostResponse(PostBaseSchema):

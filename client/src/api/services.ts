@@ -2,6 +2,8 @@ import axios, { AxiosResponse } from 'axios';
 import { api } from './endpoints';
 import { CreateUserSchema, LoginUserSchema } from './types';
 
+axios.defaults.withCredentials = true;
+
 export const register = (
     email: string,
     name: string,
@@ -28,4 +30,8 @@ export const login = (email: string, pass: string): Promise<AxiosResponse> => {
     };
 
     return axios.post(api.auth.logIn, req);
+};
+
+export const refreshAuth = (): Promise<AxiosResponse> => {
+    return axios.get(api.auth.refresh);
 };

@@ -43,7 +43,7 @@ async def create_user(payload: schemas.CreateUserSchema, request: Request):
     del payload.passwordConfirm
 
     # Extract user data from payload
-    payload.verified = False
+    payload.verified = True # TODO: Change to False after email verification is working
     payload.email = payload.email.lower()
     payload.created_at = datetime.utcnow()
     payload.updated_at = payload.created_at
@@ -62,7 +62,9 @@ async def create_user(payload: schemas.CreateUserSchema, request: Request):
             "$set": {"verification_code": verification_code, "updated_at": datetime.utcnow()}})
 
         url = f"{request.url.scheme}://{request.client.host}:{request.url.port}/api/auth/verifyemail/{token.hex()}"
-        await Email(userEntity(new_user), url, [EmailStr(payload.email)]).sendVerificationCode()
+
+        #TODO Need to update email account for verification sending
+        # await Email(userEntity(new_user), url, [EmailStr(payload.email)]).sendVerificationCode()
     except Exception as error:
         User.find_one_and_update({"_id": result.inserted_id}, {
             "$set": {"verification_code": None, "updated_at": datetime.utcnow()}})

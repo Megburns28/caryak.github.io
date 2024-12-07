@@ -9,6 +9,7 @@ const ProfilePage = () => (
             padding: 1,
             gap: 1,
             alignSelf: 'stretch',
+            alignItems: 'start',
         }}
     >
         <PersonalPage />

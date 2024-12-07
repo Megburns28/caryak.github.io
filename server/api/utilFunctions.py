@@ -1,14 +1,12 @@
-from passlib.context import CryptContext
-
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+import bcrypt
 
 
 def hash_password(password: str):
-    return pwd_context.hash(password)
+    return bcrypt.hashpw(password.encode(), salt=bcrypt.gensalt())
 
 
 def verify_password(password: str, hashed_password: str):
-    return pwd_context.verify(password, hashed_password)
+    return bcrypt.checkpw(password.encode(), hashed_password)
 
 
 def verify_ku_email(email: str) -> bool:

@@ -43,7 +43,7 @@ async def create_user(payload: schemas.CreateUserSchema, request: Request):
     del payload.passwordConfirm
 
     # Extract user data from payload
-    payload.verified = False
+    payload.verified = True # TODO: Change to False after email verification is working
     payload.email = payload.email.lower()
     payload.created_at = datetime.utcnow()
     payload.updated_at = payload.created_at

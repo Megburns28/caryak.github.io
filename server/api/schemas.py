@@ -1,17 +1,17 @@
 from datetime import datetime
 from typing import List
-from pydantic import BaseModel, EmailStr, constr, HttpUrl
+from pydantic import BaseModel, EmailStr, Field, constr, HttpUrl
 from bson.objectid import ObjectId
-
 
 class UserBaseSchema(BaseModel):
     name: str
     email: str
-    created_at: datetime | None = None
-    updated_at: datetime | None = None
+    created_at: datetime | None = Field(default=None, tsType="Date")
+    updated_at: datetime | None = Field(default=None, tsType="Date")
 
     class Config:
         orm_mode = True
+        extra = "forbid"
 
 
 class CreateUserSchema(UserBaseSchema):
@@ -37,6 +37,21 @@ class UserResponse(BaseModel):
 
 class FilteredUserResponse(UserBaseSchema):
     id: str
+    
+class PyObjectId(ObjectId):
+    @classmethod
+    def __get_validators__(cls):
+        yield cls.validate
+
+    @classmethod
+    def validate(cls, v):
+        if not ObjectId.is_valid(v):
+            raise ValueError("Invalid objectid")
+        return ObjectId(v)
+
+    @classmethod
+    def __modify_schema__(cls, field_schema):
+        field_schema.update(type="string")
 
 
 class PostBaseSchema(BaseModel):
@@ -44,18 +59,19 @@ class PostBaseSchema(BaseModel):
     content: str
     category: str
     image: str
-    created_at: datetime | None = None
-    updated_at: datetime | None = None
+    created_at: datetime | None = Field(default=None, tsType="Date")
+    updated_at: datetime | None = Field(default=None, tsType="Date")
 
     class Config:
         orm_mode = True
         allow_population_by_field_name = True
         arbitrary_types_allowed = True
-        json_encoders = {ObjectId: str}
+        json_encoders = {PyObjectId: str}
+        extra = "forbid"
 
 
 class CreatePostSchema(PostBaseSchema):
-    user: ObjectId | None = None
+    user: PyObjectId | None = None
     title: str
     content: str
     category: str
@@ -63,11 +79,12 @@ class CreatePostSchema(PostBaseSchema):
     pass
 
 
+
 class PostResponse(PostBaseSchema):
     id: str
     user: FilteredUserResponse
-    created_at: datetime
-    updated_at: datetime
+    created_at: datetime = Field(tsType="Date")
+    updated_at: datetime = Field(tsType="Date")
 
 
 class UpdatePostSchema(BaseModel):
@@ -82,6 +99,7 @@ class UpdatePostSchema(BaseModel):
         allow_population_by_field_name = True
         arbitrary_types_allowed = True
         json_encoders = {ObjectId: str}
+        extra = "forbid"
 
 
 class ListPostResponse(BaseModel):

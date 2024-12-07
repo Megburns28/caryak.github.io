@@ -23,7 +23,7 @@ const AccountInfo = () => {
         refreshAuth().catch(() => {
             setAuth(false);
         });
-    }, 5000);
+    }, REFRESH_INTERVAL_MS);
 
     return (
         <>

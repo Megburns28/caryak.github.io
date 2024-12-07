@@ -1,5 +1,5 @@
 import { Box } from '@mui/material';
-import AccountDisplay from './AccountDisplay';
+import AccountDisplay from './account-display/AccountDisplay';
 import PersonalPage from './PersonalPage';
 
 const ProfilePage = () => (

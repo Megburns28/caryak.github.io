@@ -1,7 +1,7 @@
 import { Button, Typography } from '@mui/material';
 import { Dispatch, FC, SetStateAction, useMemo, useState } from 'react';
 import { useToggle } from 'usehooks-ts';
-import { logIn, register } from '../../api/services/auth';
+import { logIn, register } from '../../../api/services/auth';
 import HelperTextField from './HelperTextField';
 
 const KETTERING_EMAIL_LENGTH = 8;

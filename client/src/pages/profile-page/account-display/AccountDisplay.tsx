@@ -2,7 +2,7 @@ import { Settings } from '@mui/icons-material';
 import { Box, IconButton, Popover } from '@mui/material';
 import { MouseEvent, useCallback, useState } from 'react';
 import { useInterval } from 'usehooks-ts';
-import { refreshAuth } from '../../api/services/auth';
+import { refreshAuth } from '../../../api/services/auth';
 import AccountInput from './AccountInput';
 
 const REFRESH_INTERVAL_MS = 10 * 60 * 1000;

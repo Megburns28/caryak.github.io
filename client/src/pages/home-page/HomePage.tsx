@@ -13,6 +13,9 @@ const HomePage = () => (
         </div>
         <h1>Home</h1>
     </Box>
+    //TODO: use floating action button to create new post
+    //TODO: use loading icon at the bottom of scroll while fetching more posts
+    //TODO: use card to put post on
 );
 
 export default HomePage;

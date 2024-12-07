@@ -1,12 +1,17 @@
-import { Box, Typography } from '@mui/material';
+import { Box, Skeleton, Typography } from '@mui/material';
 import { FC } from 'react';
 
 interface InfoFieldDisplayProps {
-    label: string | null;
+    label: string;
     value: string | null;
+    valueSkelWidth: number;
 }
 
-const InfoFieldDisplay: FC<InfoFieldDisplayProps> = ({ label, value }) => (
+const InfoFieldDisplay: FC<InfoFieldDisplayProps> = ({
+    label,
+    value,
+    valueSkelWidth,
+}) => (
     <Box
         sx={{
             display: 'flex',
@@ -15,7 +20,11 @@ const InfoFieldDisplay: FC<InfoFieldDisplayProps> = ({ label, value }) => (
         }}
     >
         <Typography fontWeight='bold'>{label}</Typography>
-        <Typography>{value}</Typography>
+        {value ? (
+            <Typography>{value}</Typography>
+        ) : (
+            <Skeleton variant='text' width={valueSkelWidth} />
+        )}
     </Box>
 );
 

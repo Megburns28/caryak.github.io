@@ -23,11 +23,16 @@ const AccountInfo: FC<AccountInfoProps> = ({ setAuth }) => {
     return (
         <>
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-                <InfoFieldDisplay label='Name' value={userInfo?.name ?? null} />
+                <InfoFieldDisplay
+                    label='Name'
+                    value={userInfo?.name ?? null}
+                    valueSkelWidth={100}
+                />
                 <Divider flexItem />
                 <InfoFieldDisplay
                     label='Email'
                     value={userInfo?.email ?? null}
+                    valueSkelWidth={175}
                 />
             </Box>
             <Button

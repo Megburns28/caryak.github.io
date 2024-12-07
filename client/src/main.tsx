@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
@@ -6,6 +7,8 @@ import './index.css';
 import HomePage from './pages/home-page/HomePage.tsx';
 import LeaderboardPage from './pages/leaderboard-page/LeaderboardPage.tsx';
 import ProfilePage from './pages/profile-page/ProfilePage.tsx';
+
+axios.defaults.withCredentials = true;
 
 const root = document.getElementById('root');
 

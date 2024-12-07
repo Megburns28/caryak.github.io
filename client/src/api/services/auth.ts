@@ -1,8 +1,6 @@
 import axios, { AxiosResponse } from 'axios';
-import { api } from './endpoints';
-import { CreateUserSchema, LoginUserSchema } from './types';
-
-axios.defaults.withCredentials = true;
+import { api } from '../endpoints';
+import { CreateUserSchema, LoginUserSchema } from '../types';
 
 export const register = (
     email: string,
@@ -23,7 +21,7 @@ export const register = (
     return axios.post(api.auth.register, req);
 };
 
-export const login = (email: string, pass: string): Promise<AxiosResponse> => {
+export const logIn = (email: string, pass: string): Promise<AxiosResponse> => {
     const req: LoginUserSchema = {
         email: email,
         password: pass,
@@ -34,4 +32,8 @@ export const login = (email: string, pass: string): Promise<AxiosResponse> => {
 
 export const refreshAuth = (): Promise<AxiosResponse> => {
     return axios.get(api.auth.refresh);
+};
+
+export const logOut = (): Promise<AxiosResponse> => {
+    return axios.get(api.auth.logOut);
 };

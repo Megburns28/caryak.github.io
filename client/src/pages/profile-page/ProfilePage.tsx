@@ -1,5 +1,5 @@
 import { Box } from '@mui/material';
-import AccountInfo from './AccountInfo';
+import AccountDisplay from './AccountDisplay';
 import PersonalPage from './PersonalPage';
 
 const ProfilePage = () => (
@@ -12,7 +12,7 @@ const ProfilePage = () => (
         }}
     >
         <PersonalPage />
-        <AccountInfo />
+        <AccountDisplay />
     </Box>
 );
 

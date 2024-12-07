@@ -5,5 +5,9 @@ export const api = {
         register: API_BASE + 'auth/register',
         logIn: API_BASE + 'auth/login',
         refresh: API_BASE + 'auth/refresh',
+        logOut: API_BASE + 'auth/logout',
+    },
+    user: {
+        me: API_BASE + 'users/me',
     },
 };

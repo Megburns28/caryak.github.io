@@ -1,7 +1,7 @@
 import { Button, Typography } from '@mui/material';
 import { Dispatch, FC, SetStateAction, useMemo, useState } from 'react';
 import { useToggle } from 'usehooks-ts';
-import { login, register } from '../../api/services';
+import { logIn, register } from '../../api/services/auth';
 import HelperTextField from './HelperTextField';
 
 const KETTERING_EMAIL_LENGTH = 8;
@@ -92,7 +92,7 @@ const AccountInput: FC<AccountInputProps> = ({ setAuth }) => {
                             })
                             .catch(() => null);
                     } else {
-                        login(email, pass)
+                        logIn(email, pass)
                             .then(() => {
                                 setAuth(true);
                             })

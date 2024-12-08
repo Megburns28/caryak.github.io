@@ -20,8 +20,8 @@ const Header = () => {
     const [_auth, setAuth] = useState(true);
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const [closingMenu, setClosingMenu] = useState(false);
-
-    const _handleAuth = useCallback((event: ChangeEvent<HTMLInputElement>) => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const handleAuth = useCallback((event: ChangeEvent<HTMLInputElement>) => {
         setAuth(event.target.checked);
     }, []);
 

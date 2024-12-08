@@ -17,13 +17,13 @@ import {
 } from 'react';
 
 const Header = () => {
-    const [_auth, setAuth] = useState(true);
+    const [auth, setAuth] = useState(true);
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const [closingMenu, setClosingMenu] = useState(false);
     
-    //const handleAuth = useCallback((event: ChangeEvent<HTMLInputElement>) => {
-        //setAuth(event.target.checked);
-    //}, []);
+    const handleAuth = useCallback((event: ChangeEvent<HTMLInputElement>) => {
+        setAuth(event.target.checked);
+    }, []);
 
     const handleMenu = useCallback((event: MouseEvent<HTMLElement>) => {
         setAnchorEl(event.currentTarget);
